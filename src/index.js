@@ -22,8 +22,10 @@ class EasyError{
     if(this.#settings.callback === undefined) callback = callbackDefault;
     else callback = this.#settings.callback;
     const handler = { get: (target, prop, receiver)=>{
+                                const type = this.#settings.type
                                 let messaggio = Reflect.get(target, prop, receiver);
-                                return (valore, ...altri_args)=>{return callback(this.#settings.type, messaggio, valore, ...altri_args)};
+                                return function(valore, ...altri_args){
+                                  return callback(type, messaggio, valore, ...altri_args)};
                               },
                       set: (target, prop, value, receiver)=>{
                             //// inserire controllo se già definito, deve restituire errore e non settare

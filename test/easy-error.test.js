@@ -51,6 +51,12 @@ describe('EasyError', () => {
       errors.nome = 'stringa';
       expect(errors.nome('valore', 'altro valore')).to.be.an.instanceof(TypeError).that.deep.include({message: 'stringa. ricevuto valore, altro valore'});
     });
+    it('new errors.nome(valore) restitisce istanza di TypeError', () => {
+      errors.nome = 'stringa';
+      let istanza;
+      expect(()=>{istanza = new errors.nome('valore');}).to.not.throw();
+      expect(istanza).to.be.an.instanceof(TypeError).that.deep.include({message: 'stringa. ricevuto valore'});
+    });
     it.skip('errors.nome = valore diverso da stringa', () => {
       /// potrebbe aver senso se usato con una callback personalizzata. non voglio limitare il suo utilizzo
     });
