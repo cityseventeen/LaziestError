@@ -33,7 +33,6 @@ Qui un esempio e il risulato che si ottiene con questa callback
 const callback = (type_error, messaggio, ...args) => {
     let messaggio_da_restituire = 'Attenzione!'.concat(messaggio, ' gli argomenti erano ${...args}')
     let errore = new type_error(messaggio_da_restituire).
-    errore.codice_errore = 55;
     return errore;
 }
 
