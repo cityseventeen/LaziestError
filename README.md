@@ -24,7 +24,7 @@ errors.errore2 = 'altro messaggio'
 
 // e viene chiamato in questo modo
 new errors.errore1() // -> istanza di TypeError("messaggio")
-new errors.errore2(valore) // -> istanza di TypeError("messaggio. Ricevuto ${valore}")
+new errors.errore2(valore) // -> istanza di TypeError("altro messaggio. Ricevuto ${valore}")
 ```
 
 ### Utilizzo di callback per rendere il messaggio dinamico
