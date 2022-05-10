@@ -16,7 +16,7 @@ throw new Error(errors.errore1.concat('. ma è stato ricevuto ${valore}'))
 EasyError vuole semplificare la generazione e l'uso degli errori, permettendo di associare fin dall'inizio il particolare tipo di errore al messaggio, e anche poter restituire un messaggio personalizzabile e dinamico.
 
 # Come funzione EasyError
-`new EasyError(tipo_di_errore, [callback])
+`new EasyError(tipo_di_errore, [callback])`
 ```js
 const errors = new EasyError(TypeError)
 errors.errore1 = 'messaggio'
@@ -24,7 +24,7 @@ errors.errore2 = 'altro messaggio'
 
 // e viene chiamato in questo modo
 new errors.errore1() // -> istanza di TypeError("messaggio")
-new errors.errore2(valore) // -> istanza di TypeError("messaggio. Ricevuto ${valore}")
+new errors.errore2(valore) // -> istanza di TypeError("altro messaggio. Ricevuto ${valore}")
 ```
 
 ### Utilizzo di callback per rendere il messaggio dinamico
@@ -33,7 +33,6 @@ Qui un esempio e il risulato che si ottiene con questa callback
 const callback = (type_error, messaggio, ...args) => {
     let messaggio_da_restituire = 'Attenzione!'.concat(messaggio, ' gli argomenti erano ${...args}')
     let errore = new type_error(messaggio_da_restituire).
-    errore.codice_errore = 55;
     return errore;
 }
 
