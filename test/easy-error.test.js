@@ -39,9 +39,9 @@ describe('EasyError', () => {
       errors.nome = 'stringa';
       expect(errors.nome = 'stringa').to.be.false;
     });
-    it.skip('get errors.nome restituisce una funzione', () => {
+    it('get errors.nome restituisce una funzione', () => {
       errors.nome = 'stringa';
-      expect(errors.nome).to.be.a('fuction');
+      expect(errors.nome).to.be.a('function');
     });
     it('errors.nome(valore) restituisce una istanza di type_error definito nel costruttore', () => {
       errors.nome = 'stringa';
