@@ -1,26 +1,34 @@
 /* global Reflect */
 
-const callbackDefault =(type_error, valore)=>{return new this.#settings.type(value.concat(' ricevuto', valore));};
+const callbackDefault =(type_error, messaggio, valore, ...altri)=>{
+  let messaggio_errore_da_ritornare = messaggio.concat('. ricevuto ', valore);
+  for(let arg of altri){
+    messaggio_errore_da_ritornare = messaggio_errore_da_ritornare.concat(`, ${arg}`);
+  }
+  return new type_error(messaggio_errore_da_ritornare);
+};
 
 class EasyError{
   #settings;
   constructor(type_error, callback=undefined){
     checkConstructor(type_error, callback);
+    this.#settings = {};
     this.#settings.type = type_error;
     this.#settings.callback = callback;
-    return #returnProxy();
+    return this.#returnProxy();
   }
   #returnProxy(){
     let callback;
     if(this.#settings.callback === undefined) callback = callbackDefault;
     else callback = this.#settings.callback;
     const handler = { get: (target, prop, receiver)=>{
-                                let value = Reflect.get(...arguments);
-                                return (valore, ...altri_args)=>{callback(valore, ...altri_args)};
+                                let messaggio = Reflect.get(target, prop, receiver);
+                                return (valore, ...altri_args)=>{return callback(this.#settings.type, messaggio, valore, ...altri_args)};
                               },
                       set: (target, prop, value, receiver)=>{
                             //// inserire controllo se già definito, deve restituire errore e non settare
-                            Reflect.set(...arguments);
+                            console.dir(arguments);
+                            Reflect.set(target, prop, value, receiver);
                             return true;
                       }
                     };
