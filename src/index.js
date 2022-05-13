@@ -8,7 +8,7 @@ const callbackDefault =(type_error, messaggio, valore, ...altri)=>{
   return new type_error(messaggio_errore_da_ritornare);
 };
 
-class EasyError{
+class LazyError{
   #settings;
   constructor(type_error, callback=undefined){
     checkConstructor(type_error, callback);
@@ -34,8 +34,8 @@ class EasyError{
                             return true;
                       }
                     };
-    const EasyError = comandiEasyError;
-    return new Proxy(EasyError, handler);
+    const LazyError = comandiLazyError;
+    return new Proxy(LazyError, handler);
   }
 }
 function checkConstructor(...args){
@@ -43,10 +43,10 @@ function checkConstructor(...args){
   if(!(args[1] === undefined || typeof args[1] === 'function')) throw new TypeError(`la callback deve essere una funzione. Ricevuto ${args[1]}`);
 }
 
-function comandiEasyError(){
+function comandiLazyError(){
   /* eventuali metodi che si vogliono mettere a disposizione, es come list per avere la lista di tutti gli errori*/
 }
 
 
   
-module.exports = EasyError;
+module.exports = LazyError;

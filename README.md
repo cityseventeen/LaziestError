@@ -1,4 +1,4 @@
-# EasyError
+# LazyError
  Permette di generare degli errori dal testo personalizzato in modo semplice e diretto, e decidere tramite callback quale tipo di errore restituire e quali modifiche al testo produrre automaticamente
 
 # Problema che vuole risolvere
@@ -13,12 +13,12 @@ Resta ancora il problema di modificare il messaggio di errore, ad esempio insere
 throw new Error(errors.errore1.concat('. ma è stato ricevuto ${valore}'))
 ```
 
-EasyError vuole semplificare la generazione e l'uso degli errori, permettendo di associare fin dall'inizio il particolare tipo di errore al messaggio, e anche poter restituire un messaggio personalizzabile e dinamico.
+LazyError vuole semplificare la generazione e l'uso degli errori, permettendo di associare fin dall'inizio il particolare tipo di errore al messaggio, e anche poter restituire un messaggio personalizzabile e dinamico.
 
-# Come funzione EasyError
-`new EasyError(tipo_di_errore, [callback])`
+# Come funzione LazyError
+`new LazyError(tipo_di_errore, [callback])`
 ```js
-const errors = new EasyError(TypeError)
+const errors = new LazyError(TypeError)
 errors.errore1 = 'messaggio'
 errors.errore2 = 'altro messaggio'
 
@@ -36,7 +36,7 @@ const callback = (type_error, messaggio, ...args) => {
     return errore;
 }
 
-const errors = new EasyError(TypeError, callback);
+const errors = new LazyError(TypeError, callback);
 errors.errore_argomenti = 'tutti gli argomenti devono essere validi'
 
 // e viene usato come

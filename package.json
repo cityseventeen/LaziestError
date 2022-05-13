@@ -1,14 +1,14 @@
 {
-  "name": "easy-error",
-  "version": "0.1.0",
+  "name": "lazy-error",
+  "version": "0.1.2",
   "description": "Permette di generare degli errori dal testo personalizzato in modo semplice e diretto, e decidere tramite callback quale tipo di errore restituire e quali modifiche al testo produrre automaticamente",
   "bugs": {
-    "url": "https://github.com/CitySeventeen/EasyError/issues"
+    "url": "https://github.com/CitySeventeen/LazyError/issues"
   },
-  "homepage": "https://github.com/CitySeventeen/EasyError#readme",
+  "homepage": "https://github.com/CitySeventeen/LazyError#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/CitySeventeen/EasyError.git"
+    "url": "https://github.com/CitySeventeen/LazyError.git"
   },
   "main": "./src/index.js",
   "scripts": {
