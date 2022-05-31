@@ -1,11 +1,21 @@
 /* global Reflect */
 
-const callbackDefault =(type_error, messaggio, valore, ...altri)=>{
-  let messaggio_errore_da_ritornare = messaggio.concat('. ricevuto ', valore);
+const callbackDefault =(type_error, message_error, valore, ...altri)=>{
+  let message;
+  if(typeof message_error === 'object') message = message_error.message;
+  else message = message_error;
+  message = message.concat(`. Received ${valore} ${typeof valore}`);
+
+  let adding_value = '';
   for(let arg of altri){
-    messaggio_errore_da_ritornare = messaggio_errore_da_ritornare.concat(`, ${arg}`);
+    adding_value = adding_value.concat(`, ${arg} ${typeof arg}`);
   }
-  return new type_error(messaggio_errore_da_ritornare);
+  let messaggio_errore_da_ritornare = message.concat(adding_value)
+  if(typeof message_error === 'object'){
+    message_error.message = messaggio_errore_da_ritornare;
+    return message_error}
+  else
+    return new type_error(messaggio_errore_da_ritornare);
 };
 
 class LazyError{

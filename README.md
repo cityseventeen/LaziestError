@@ -52,3 +52,17 @@ errors.error_name = message
 errors.message.error_name === message  // true
 errors.error_name('value') // return TypeError with message: `${message}. Received ${value}`
 ```
+
+## message as instance of error
+Now is possible to custom the type of error returned by a specific error setting a new instance of error instead of a string.
+
+```js
+const error_type_default_for_each_errors = TypeErro
+const errors = new LazyError(error_type_default_for_each_errors)
+errors.error1 = 'string'
+errors.error2 = new Error('message')
+
+// and for using
+errors.error1('value') // return instance of TypeError with message + Received value
+errors.error2('value0) // return instnace of Error with message + Received value
+```

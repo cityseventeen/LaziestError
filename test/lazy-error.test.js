@@ -49,17 +49,17 @@ describe('LazyError', () => {
     });
     it('errors.nome(valore) restituisce una istanza di type_error definito nel costruttore', () => {
       errors.nome = 'stringa';
-      expect(errors.nome('valore')).to.be.an.instanceof(TypeError).that.deep.include({message: 'stringa. ricevuto valore'});
+      expect(errors.nome('valore')).to.be.an.instanceof(TypeError).that.deep.include({message: 'stringa. Received valore string'});
     });
     it('errors.nome(valore, altro valore) restituisce una istanza di type_error definito nel costruttore', () => {
       errors.nome = 'stringa';
-      expect(errors.nome('valore', 'altro valore')).to.be.an.instanceof(TypeError).that.deep.include({message: 'stringa. ricevuto valore, altro valore'});
+      expect(errors.nome('valore', 'altro valore')).to.be.an.instanceof(TypeError).that.deep.include({message: 'stringa. Received valore string, altro valore string'});
     });
     it('new errors.nome(valore) restitisce istanza di TypeError', () => {
       errors.nome = 'stringa';
       let istanza;
       expect(()=>{istanza = new errors.nome('valore');}).to.not.throw();
-      expect(istanza).to.be.an.instanceof(TypeError).that.deep.include({message: 'stringa. ricevuto valore'});
+      expect(istanza).to.be.an.instanceof(TypeError).that.deep.include({message: 'stringa. Received valore string'});
     });
     it.skip('errors.nome = valore diverso da stringa', () => {
       /// potrebbe aver senso se usato con una callback personalizzata. non voglio limitare il suo utilizzo
@@ -89,6 +89,18 @@ describe('LazyError', () => {
       errors.errore1 = 'messaggio di errore';
       console.dir(errors.message);
       expect(errors.message.errore1).to.eql('messaggio di errore');
+    });
+  });
+  describe('message as instance of error', () => {
+    let errors;
+    beforeEach(()=>{
+      errors = new LazyError(TypeError);
+    });
+    it('message as new Error(message) return the same instance with `message. Received ${value}', () => {
+      errors.error1 = new Error('message');
+      let error1 = errors.error1('value');
+      expect(error1).to.be.an.instanceOf(Error);
+      expect(error1.message).to.eql('message. Received value string');
     });
   });
   
