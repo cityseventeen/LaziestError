@@ -15,7 +15,7 @@ throw new Error(errors.errore1.concat('. ma è stato ricevuto ${valore}'))
 
 LazyError vuole semplificare la generazione e l'uso degli errori, permettendo di associare fin dall'inizio il particolare tipo di errore al messaggio, e anche poter restituire un messaggio personalizzabile e dinamico.
 
-# Come funzione LazyError
+# What it works LazyError
 `new LazyError(tipo_di_errore, [callback])`
 ```js
 const errors = new LazyError(TypeError)
@@ -41,4 +41,14 @@ errors.errore_argomenti = 'tutti gli argomenti devono essere validi'
 
 // e viene usato come
 throw new errors.errore_argomenti(arg1, arg2, arg3)
+```
+
+## return the string message
+Now is possible to return the string previously setted for a error message.
+You can use the property message before of error name property.
+```js
+const message = 'this is an error message that will be customized by callback'
+errors.error_name = message
+errors.message.error_name === message  // true
+errors.error_name('value') // return TypeError with message: `${message}. Received ${value}`
 ```
