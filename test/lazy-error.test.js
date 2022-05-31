@@ -14,6 +14,10 @@ describe('LazyError', () => {
       const errors = new LazyError(TypeError);
       expect(errors).to.satisfy((val)=>{return util.types.isProxy(val);});
     });
+    it('new LazyError è istanza di LazyError', () => {
+      const errors = new LazyError(TypeError);
+      expect(errors).to.be.an.instanceOf(LazyError);
+    });
     for(let tipo of [undefined, 'stringa', 1, 0, true, false, -8]){
       it.skip(`type_error senza constructor = ${tipo} restituisce errore`, () => {
         expect(()=>{new LazyError(tipo);}).to.throw(TypeError, /deve avere un constructor/);
@@ -74,6 +78,17 @@ describe('LazyError', () => {
       const errors = new LazyError(type_error, callback);
       errors.nome = 'stringa di errore che non verrà considerata dalla callback';
       expect(errors.name('valore', 'secondo')).to.be.an.instanceof(type_error).that.deep.include({message: 'custom valore e ancora secondo'});
+    });
+  });
+  describe('message property', () => {
+    let errors;
+    beforeEach(()=>{
+      errors = new LazyError(TypeError);
+    });
+    it('to set a message implies the storing message in instance', () => {
+      errors.errore1 = 'messaggio di errore';
+      console.dir(errors.message);
+      expect(errors.message.errore1).to.eql('messaggio di errore');
     });
   });
   

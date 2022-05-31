@@ -9,33 +9,46 @@ const callbackDefault =(type_error, messaggio, valore, ...altri)=>{
 };
 
 class LazyError{
-  #settings;
+  #settings; #preset_keys;
   constructor(type_error, callback=undefined){
     checkConstructor(type_error, callback);
+    callback = callback===undefined?callbackDefault:callback
+    
     this.#settings = {};
-    this.#settings.type = type_error;
+    this.#settings.type = type_error;   
     this.#settings.callback = callback;
-    return this.#returnProxy();
+    this.messages_list = {};
+    this.#preset_keys = ['message', 'messages_list'];
+    return this.#returnProxy(type_error, callback);
   }
-  #returnProxy(){
-    let callback;
-    if(this.#settings.callback === undefined) callback = callbackDefault;
-    else callback = this.#settings.callback;
+  get message(){
+    return this.messages_list;
+  }
+  #returnProxy(type_error, callback){
     const handler = { get: (target, prop, receiver)=>{
-                                const type = this.#settings.type
-                                let messaggio = Reflect.get(target, prop, receiver);
-                                return function(valore, ...altri_args){
-                                  return callback(type, messaggio, valore, ...altri_args)};
-                              },
+                                let value_property = Reflect.get(target, prop, receiver);
+                                if(this.#isPresetKey(prop)) return value_property;
+                                else{
+                                  return function errorGenerator(valore, ...altri_args){
+                                    return callback(type_error, value_property, valore, ...altri_args)};
+                                }
+                            },
                       set: (target, prop, value, receiver)=>{
                             //// inserire controllo se già definito, deve restituire errore e non settare
-                            console.dir(arguments);
+                            this.#addRawMessage(prop, value)
                             Reflect.set(target, prop, value, receiver);
                             return true;
                       }
                     };
-    const LazyError = comandiLazyError;
-    return new Proxy(LazyError, handler);
+    
+    return new Proxy(this, handler);
+  }
+  
+  #addRawMessage(prop, message){
+    this.messages_list[prop] = message;
+  }
+  #isPresetKey(key){
+    return this.#preset_keys.indexOf(key) !== -1;
   }
 }
 function checkConstructor(...args){
