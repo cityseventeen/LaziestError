@@ -28,20 +28,24 @@ describe('LazyError', () => {
         expect(()=>{new LazyError(TypeError, cb);}).to.throw(TypeError, /deve essere una funzione/);
       });
     }
+    it('call error not previously setted throws error', () => {
+      const errors = new LazyError(TypeError);
+      expect(()=>{errors.not_setted();}).to.throw('error not_setted is not setted');
+    });
+    it('error without value doesnt throw error', () => {
+      const errors = new LazyError(TypeError);
+      errors.error1 = 'message';
+      expect(()=>{errors.error1();}).to.not.throw();
+    });
   });
   describe('assegnazione errori', () => {
     let errors;
     beforeEach(()=>{
       errors = new LazyError(TypeError);
     });
-    it('errors.nome = stringa restituisce non false', () => {
+    it('errors.nome =striga con nome già esistente restituisce false', () => {
       errors.nome = 'stringa';
-      expect(errors.nome = 'stringa').to.not.be.false;
-    });
-    it.skip('errors.nome =striga con nome già esistente restituisce false', () => {
-      //// da implementare
-      errors.nome = 'stringa';
-      expect(errors.nome = 'stringa').to.be.false;
+      expect(()=>{errors.nome = 'stringa';}).to.throw('The error name is already setted');
     });
     it('get errors.nome restituisce una funzione', () => {
       errors.nome = 'stringa';
@@ -70,13 +74,13 @@ describe('LazyError', () => {
     it('callback che non considera messaggio errore e accetta un solo valore', () => {
       const callback = (type_error, messaggio, valore)=>{return new type_error(`custom ${valore}`);};
       const errors = new LazyError(type_error, callback);
-      errors.nome = 'stringa di errore che non verrà considerata dalla callback';
+      errors.name = 'stringa di errore che non verrà considerata dalla callback';
       expect(errors.name('valore')).to.be.an.instanceof(type_error).that.deep.include({message: 'custom valore'});
     });
     it('callback che non considera messaggio e accetta più valori', () => {
       const callback = (type_error, messaggio, valore, ...args)=>{return new type_error(`custom ${valore} e ancora ${args[0]}`);};
       const errors = new LazyError(type_error, callback);
-      errors.nome = 'stringa di errore che non verrà considerata dalla callback';
+      errors.name = 'stringa di errore che non verrà considerata dalla callback';
       expect(errors.name('valore', 'secondo')).to.be.an.instanceof(type_error).that.deep.include({message: 'custom valore e ancora secondo'});
     });
   });

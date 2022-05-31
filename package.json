@@ -1,6 +1,6 @@
 {
   "name": "laziest-error",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Permette di generare degli errori dal testo personalizzato in modo semplice e diretto, e decidere tramite callback quale tipo di errore restituire e quali modifiche al testo produrre automaticamente",
   "bugs": {
     "url": "https://github.com/CitySeventeen/LaziestError/issues"

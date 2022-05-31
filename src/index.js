@@ -36,18 +36,18 @@ class LazyError{
   }
   #returnProxy(type_error, callback){
     const handler = { get: (target, prop, receiver)=>{
-                                let value_property = Reflect.get(target, prop, receiver);
-                                if(this.#isPresetKey(prop)) return value_property;
+                                let error_or_message = Reflect.get(target, prop, receiver);
+                                if(this.#isPresetKey(prop)) return error_or_message;
                                 else{
+                                  if(!isErrorSetted(error_or_message)) throw new TypeError(`error ${prop} is not setted`);
                                   return function errorGenerator(valore, ...altri_args){
-                                    return callback(type_error, value_property, valore, ...altri_args)};
+                                    return callback(type_error, error_or_message, valore, ...altri_args)};
                                 }
                             },
                       set: (target, prop, value, receiver)=>{
-                            //// inserire controllo se già definito, deve restituire errore e non settare
+                            this.#isAlreadySettedThrowsError(target, prop, receiver);
                             this.#addRawMessage(prop, value)
-                            Reflect.set(target, prop, value, receiver);
-                            return true;
+                            return Reflect.set(target, prop, value, receiver);
                       }
                     };
     
@@ -60,10 +60,17 @@ class LazyError{
   #isPresetKey(key){
     return this.#preset_keys.indexOf(key) !== -1;
   }
+  #isAlreadySettedThrowsError(target, prop, receiver){
+    let previously_value = Reflect.get(target, prop, receiver);
+    if(previously_value !== undefined) throw new TypeError(`The error name is already setted. Tried to set ${prop}`);
+  }
 }
 function checkConstructor(...args){
   //if(typeof args[0] === 'function' && args[0].) /// da fare. cercare come controllare che la funzione in arg[0] abbia un constructor
   if(!(args[1] === undefined || typeof args[1] === 'function')) throw new TypeError(`la callback deve essere una funzione. Ricevuto ${args[1]}`);
+}
+function isErrorSetted(error){
+  return error !== undefined;
 }
 
 function comandiLazyError(){
