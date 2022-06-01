@@ -1,4 +1,13 @@
 # LazyError
+[![Test][test-pass-img]][test-pass-url]
+[![Commit Number][commit-number-img]][commit-number-url]
+
+[test-pass-img]: https://github.com/CitySeventeen/LaziestError/workflows/Node.js%20CI/badge.svg
+[test-pass-url]: https://github.com/CitySeventeen/LaziestError/actions/workflows/node.js.yml
+
+[commit-number-img]: https://img.shields.io/github/commit-activity/m/CitySeventeen/LaziestError
+[commit-number-url]: https://github.com/CitySeventeen/LaziestError/commits/main
+
  Permette di generare degli errori dal testo personalizzato in modo semplice e diretto, e decidere tramite callback quale tipo di errore restituire e quali modifiche al testo produrre automaticamente
 
 # Problema che vuole risolvere
