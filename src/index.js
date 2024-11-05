@@ -41,27 +41,49 @@ const callbackDefault =(type_error, message_error, valore, ...altri)=>{
 };
 
 class LazyError{
-  #settings; #preset_keys;
+  #preset_keys;
   constructor(type_error, callback=undefined){
     checkConstructor(type_error, callback);
     callback = callback===undefined?callbackDefault:callback
     
-    this.#settings = {};
-    this.#settings.type = type_error;   
-    this.#settings.callback = callback;
+    this.settings = {};
+    this.settings.type = type_error;   
+    this.settings.callback = callback;
     this.messages_list = {};
-    this.#preset_keys = ['message', 'messages_list'];
+    this.#preset_keys = ['message', 'messages_list', 'throwIf', 'settings'];
+
     return this.#returnProxy(type_error, callback, callbackNoValue);
   }
   get message(){
     return this.messages_list;
   }
+
+  throwIf(condition){
+    if(typeof condition !== 'boolean')
+      throw new TypeError('condition must be boolean value');
+
+    const lazyerror_context = this;
+
+    const handler = { get: (target, prop, receiver)=>{
+                              let error_message = lazyerror_context.messages_list[prop];
+                              if(!isErrorSetted(error_message)) throw new TypeError(`B: error ${prop} is not setted`);
+                              return function errorGenerator(valore, ...altri_args){
+                                const error = lazyerror_context.settings.callback(lazyerror_context.settings.type, error_message, valore, ...altri_args);
+                                if(condition === true) throw error;
+                                else;
+                              }
+                    }};
+    const object_list_errors_to_return = {};
+    return new Proxy(object_list_errors_to_return, handler);
+  }
+
+
   #returnProxy(type_error, callback, callbackNoValue){
     const handler = { get: (target, prop, receiver)=>{
                                 let error_or_message = Reflect.get(target, prop, receiver);
                                 if(this.#isPresetKey(prop)) return error_or_message;
                                 else{
-                                  if(!isErrorSetted(error_or_message)) throw new TypeError(`error ${prop} is not setted`);
+                                  if(!isErrorSetted(error_or_message)) throw new TypeError(`A: error ${prop} is not setted`);
                                   return function errorGenerator(valore, ...altri_args){
                                     return callback(type_error, error_or_message, valore, ...altri_args)};
                                 }
