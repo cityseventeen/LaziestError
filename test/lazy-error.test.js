@@ -51,6 +51,14 @@ describe('LazyError', () => {
       errors.nome = 'stringa';
       expect(errors.nome).to.be.a('function');
     });
+    it.skip('get errors.nome restituisce errore come definito per la istanza di lazyerror', () => {
+      errors.nome = 'stringa';
+      expect(errors.nome).to.be.an.instanceOf(TypeError)
+    });
+    it.skip(`get errors.nome restituisce errore come definito per la property`, function (){
+        errors.nome = new Error('stringa');
+        expect(errors.nome).to.be.an.instanceOf(Error)
+    });
     it('errors.nome(valore) restituisce una istanza di type_error definito nel costruttore', () => {
       errors.nome = 'stringa';
       expect(errors.nome('valore')).to.be.an.instanceof(TypeError).that.deep.include({message: 'stringa. Received valore that is a/an string'});

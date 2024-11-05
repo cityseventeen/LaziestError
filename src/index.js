@@ -1,6 +1,21 @@
 /* global Reflect */
 const util = require('util');
 
+const callbackNoValue = (type_error, message_error)=>{
+  let message;
+  if(typeof message_error === 'object') message = message_error.message;
+  else message = message_error;
+
+  let messaggio_errore_da_ritornare = message;
+  if(typeof message_error === 'object'){
+    message_error.message = messaggio_errore_da_ritornare;
+    return message_error}
+  else
+    return new type_error(messaggio_errore_da_ritornare);
+};
+
+
+
 const callbackDefault =(type_error, message_error, valore, ...altri)=>{
   let message;
   if(typeof message_error === 'object') message = message_error.message;
@@ -10,7 +25,7 @@ const callbackDefault =(type_error, message_error, valore, ...altri)=>{
   if(typeof valore === 'object')
     value_inspect = util.inspect(valore, {depth: null, showHidden: false});
   else value_inspect = valore;
-  
+
   message = message.concat(`. Received ${value_inspect} that is a/an ${typeof valore}`);
 
   let adding_value = '';
@@ -36,12 +51,12 @@ class LazyError{
     this.#settings.callback = callback;
     this.messages_list = {};
     this.#preset_keys = ['message', 'messages_list'];
-    return this.#returnProxy(type_error, callback);
+    return this.#returnProxy(type_error, callback, callbackNoValue);
   }
   get message(){
     return this.messages_list;
   }
-  #returnProxy(type_error, callback){
+  #returnProxy(type_error, callback, callbackNoValue){
     const handler = { get: (target, prop, receiver)=>{
                                 let error_or_message = Reflect.get(target, prop, receiver);
                                 if(this.#isPresetKey(prop)) return error_or_message;
