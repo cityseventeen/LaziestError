@@ -1,10 +1,17 @@
 /* global Reflect */
+const util = require('util');
 
 const callbackDefault =(type_error, message_error, valore, ...altri)=>{
   let message;
   if(typeof message_error === 'object') message = message_error.message;
   else message = message_error;
-  message = message.concat(`. Received ${valore} ${typeof valore}`);
+
+  let value_inspect;
+  if(typeof valore === 'object')
+    value_inspect = util.inspect(valore, {depth: null, showHidden: false});
+  else value_inspect = valore;
+  
+  message = message.concat(`. Received ${value_inspect} that is a/an ${typeof valore}`);
 
   let adding_value = '';
   for(let arg of altri){
